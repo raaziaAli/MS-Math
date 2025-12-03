@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Math Mentor - Middle School</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-card: #0b1120;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56,189,248,0.18);
+      --accent-2: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --success: #4ade80;
+      --border-subtle: rgba(148,163,184,0.4);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #020617, #000000);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(135deg, rgba(15,23,42,0.98), #020617);
+      border-radius: 24px;
+      border: 1px solid rgba(148,163,184,0.5);
+      padding: 14px;
+      box-shadow:
+        0 18px 40px rgba(0,0,0,0.7),
+        0 0 0 1px rgba(15,23,42,0.85);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(148,163,184,0.4);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top, #38bdf8, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #020617;
+      font-weight: 800;
+      font-size: 20px;
+      box-shadow:
+        0 12px 24px rgba(56,189,248,0.55),
+        0 0 0 2px rgba(15,23,42,0.9);
+    }
+
+    .title {
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    select {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15,23,42,0.95);
+      color: var(--text);
+      outline: none;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #020617, #020617);
+      border-radius: var(--radius-lg);
+      padding: 10px;
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .card-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+    }
+
+    .topic-btn {
+      border-radius: 16px;
+      padding: 10px;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(148,163,184,0.5);
+      font-size: 13px;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .topic-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.45);
+    }
+
+    .topic-title {
+      font-weight: 600;
+    }
+
+    .topic-note {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .small-row {
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .stats-badge {
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid rgba(148,163,184,0.6);
+      color: var(--muted);
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 12px;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color: #020617;
+      font-weight: 600;
+      box-shadow: 0 10px 22px rgba(34,197,94,0.55);
+    }
+
+    .btn-ghost {
+      background: rgba(15,23,42,0.96);
+      color: var(--muted);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-sm {
+      padding: 4px 9px;
+      font-size: 11px;
+    }
+
+    .example-box {
+      border-radius: var(--radius-md);
+      padding: 10px;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(55,65,81,0.95);
+      font-size: 13px;
+    }
+
+    .example-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .example-text {
+      margin-bottom: 6px;
+    }
+
+    .steps {
+      font-size: 12px;
+    }
+
+    .steps li {
+      margin-bottom: 3px;
+    }
+
+    .example-footer-row {
+      margin-top: 6px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .visual-box {
+      border-radius: var(--radius-md);
+      padding: 8px;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(55,65,81,0.95);
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .visual-area {
+      height: 90px;
+      border-radius: 10px;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 26px;
+      border-radius: 999px;
+      display: flex;
+      overflow: hidden;
+      width: 100%;
+      max-width: 260px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: #020617;
+    }
+
+    .bar-part-1 {
+      background: #22c55e;
+    }
+
+    .bar-part-2 {
+      background: #0ea5e9;
+    }
+
+    .tile-row {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tile {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: #0ea5e9;
+    }
+
+    .tile.alt {
+      background: #22c55e;
+    }
+
+    .number-line {
+      width: 100%;
+      max-width: 260px;
+      height: 40px;
+      position: relative;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .number-line .tick {
+      position: absolute;
+      width: 1px;
+      height: 8px;
+      background: #e5e7eb;
+      bottom: 0;
+    }
+
+    .number-line .label {
+      position: absolute;
+      bottom: -16px;
+      font-size: 10px;
+      color: var(--muted);
+      transform: translateX(-50%);
+    }
+
+    .number-line .point {
+      position: absolute;
+      bottom: 8px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      transform: translateX(-50%);
+    }
+
+    .practice-box {
+      border-radius: var(--radius-md);
+      padding: 10px;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(55,65,81,0.95);
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .practice-title {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .practice-input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .practice-input-row input {
+      flex: 1;
+      min-width: 120px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15,23,42,0.95);
+      color: var(--text);
+      outline: none;
+    }
+
+    .feedback {
+      font-size: 12px;
+    }
+
+    .feedback.ok {
+      color: var(--success);
+    }
+
+    .feedback.err {
+      color: var(--danger);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">M</div>
+        <div>
+          <div class="title">Math Mentor - Middle School</div>
+          <div class="subtitle">
+            Pick a topic, see an example, look at the picture, then try one problem.
+          </div>
+        </div>
+      </div>
+      <div class="controls-row">
+        <span>Grade</span>
+        <select id="gradeSelect">
+          <option value="6">6</option>
+          <option value="7" selected>7</option>
+          <option value="8">8</option>
+        </select>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- LEFT: Topic selection and small stats -->
+      <section class="card">
+        <div class="card-title">1. Choose a topic</div>
+        <div class="card-sub">Tap a card. Then press "New example" on the right.</div>
+
+        <div class="topic-grid" id="topicGrid">
+          <button class="topic-btn active" data-topic="ratios">
+            <div class="topic-title">Ratios / Proportions</div>
+            <div class="topic-note">Tape diagrams, unit rates, constant speed</div>
+          </button>
+          <button class="topic-btn" data-topic="percents">
+            <div class="topic-title">Percents</div>
+            <div class="topic-note">Percent of a number, increase and decrease</div>
+          </button>
+          <button class="topic-btn" data-topic="equations">
+            <div class="topic-title">Equations</div>
+            <div class="topic-note">One-step and two-step equations</div>
+          </button>
+          <button class="topic-btn" data-topic="functions">
+            <div class="topic-title">Graphs and Functions</div>
+            <div class="topic-note">Tables, graphs, slope and y-intercept</div>
+          </button>
+        </div>
+
+        <div class="small-row" style="margin-top:8px;">
+          <span>Quick stats (this browser)</span>
+          <span class="stats-badge" id="statsBadge">0 correct / 0 total</span>
+        </div>
+      </section>
+
+      <!-- RIGHT: Example, visual, practice -->
+      <section class="card">
+        <div class="small-row">
+          <div>
+            <div class="card-title">2. Example and picture</div>
+            <div class="card-sub">Look at the example and the drawing, then try one yourself.</div>
+          </div>
+          <button class="btn btn-primary btn-sm" id="newExampleBtn">New example</button>
+        </div>
+
+        <div class="example-box">
+          <div class="example-label">Example</div>
+          <div class="example-text" id="exampleText">
+            Choose a topic and press "New example" to see a problem.
+          </div>
+          <ol class="steps" id="exampleSteps"></ol>
+          <div class="example-footer-row">
+            <button class="btn btn-ghost btn-sm" id="playHumanAudioBtn">
+              Play teacher voice
+            </button>
+            <audio id="topicAudio"></audio>
+          </div>
+        </div>
+
+        <div class="visual-box">
+          <div class="example-label">Picture</div>
+          <div class="visual-area" id="visualArea">
+            <span style="font-size:12px; color:var(--muted);">
+              A simple picture for the problem will appear here.
+            </span>
+          </div>
+          <div id="visualCaption" style="font-size:11px; color:var(--muted);"></div>
+        </div>
+
+        <div class="practice-box">
+          <div class="practice-title">3. Your turn</div>
+          <div id="practiceQuestion">After the example, a similar question will appear here.</div>
+          <div class="practice-input-row" style="margin-top:4px;">
+            <input id="answerInput" type="text" placeholder="Type your answer" />
+            <button class="btn btn-ghost btn-sm" id="checkAnswerBtn">Check</button>
+          </div>
+          <div class="feedback" id="feedback"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // DOM references
+    const gradeSelect = document.getElementById("gradeSelect");
+    const topicGrid = document.getElementById("topicGrid");
+    const newExampleBtn = document.getElementById("newExampleBtn");
+    const exampleTextEl = document.getElementById("exampleText");
+    const exampleStepsEl = document.getElementById("exampleSteps");
+    const visualAreaEl = document.getElementById("visualArea");
+    const visualCaptionEl = document.getElementById("visualCaption");
+    const practiceQuestionEl = document.getElementById("practiceQuestion");
+    const answerInput = document.getElementById("answerInput");
+    const checkAnswerBtn = document.getElementById("checkAnswerBtn");
+    const feedbackEl = document.getElementById("feedback");
+    const statsBadge = document.getElementById("statsBadge");
+    const playHumanAudioBtn = document.getElementById("playHumanAudioBtn");
+    const topicAudio = document.getElementById("topicAudio");
+
+    let activeTopic = "ratios";
+    let currentPractice = null;
+    let stats = loadStats();
+
+    // One audio file per topic (must exist next to index.html)
+    const audioFiles = {
+      ratios: "audio_ratios.mp3",
+      percents: "audio_percents.mp3",
+      equations: "audio_equations.mp3",
+      functions: "audio_functions.mp3"
+    };
+
+    function todayString() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function loadStats() {
+      try {
+        const raw = localStorage.getItem("mathMentorSimpleStats");
+        if (!raw) {
+          return { date: todayString(), correct: 0, total: 0 };
+        }
+        const obj = JSON.parse(raw);
+        if (obj.date !== todayString()) {
+          obj.date = todayString();
+          obj.correct = 0;
+          obj.total = 0;
+        }
+        return obj;
+      } catch {
+        return { date: todayString(), correct: 0, total: 0 };
+      }
+    }
+
+    function saveStats() {
+      localStorage.setItem("mathMentorSimpleStats", JSON.stringify(stats));
+    }
+
+    function updateStatsBadge() {
+      statsBadge.textContent = stats.correct + " correct / " + stats.total + " total";
+    }
+
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Stop audio when switching topic or example
+    function stopAudio() {
+      if (!topicAudio) return;
+      if (!topicAudio.paused && !topicAudio.ended) {
+        topicAudio.pause();
+        topicAudio.currentTime = 0;
+      }
+      playHumanAudioBtn.textContent = "Play teacher voice";
+    }
+
+    // Play human-recorded audio for the current topic
+    function playHumanAudio() {
+      const file = audioFiles[activeTopic];
+      if (!file) {
+        alert("No recording found for this topic yet.");
+        return;
+      }
+
+      // If already playing this file, stop it
+      if (
+        topicAudio.src &&
+        topicAudio.src.indexOf(file) !== -1 &&
+        !topicAudio.paused &&
+        !topicAudio.ended
+      ) {
+        stopAudio();
+        return;
+      }
+
+      topicAudio.src = file;
+      topicAudio.currentTime = 0;
+      topicAudio
+        .play()
+        .then(function () {
+          playHumanAudioBtn.textContent = "Stop teacher voice";
+        })
+        .catch(function () {
+          alert("Could not play audio. Check that " + file + " exists.");
+        });
+
+      topicAudio.onended = function () {
+        playHumanAudioBtn.textContent = "Play teacher voice";
+      };
+    }
+
+    // Topic buttons
+    topicGrid.addEventListener("click", function (e) {
+      const btn = e.target.closest(".topic-btn");
+      if (!btn) return;
+      document.querySelectorAll(".topic-btn").forEach(function (b) {
+        b.classList.remove("active");
+      });
+      btn.classList.add("active");
+      activeTopic = btn.dataset.topic;
+      feedbackEl.textContent = "";
+      practiceQuestionEl.textContent = "Press New example to see a new problem.";
+      exampleTextEl.textContent =
+        "Press New example to see a problem for this topic.";
+      exampleStepsEl.innerHTML = "";
+      visualAreaEl.innerHTML =
+        '<span style="font-size:12px; color:#9ca3af;">A simple picture for the problem will appear here.</span>';
+      visualCaptionEl.textContent = "";
+      stopAudio();
+    });
+
+    // Example and practice generation
+    function newExample() {
+      const grade = gradeSelect.value;
+      const topic = activeTopic;
+
+      let example, practice;
+      if (topic === "ratios") {
+        example = makeRatioExample(grade);
+        practice = makeRatioPractice(example);
+        drawRatioVisual(example);
+      } else if (topic === "percents") {
+        example = makePercentExample(grade);
+        practice = makePercentPractice(example);
+        drawPercentVisual(example);
+      } else if (topic === "equations") {
+        example = makeEquationExample(grade);
+        practice = makeEquationPractice(example);
+        drawEquationVisual(example);
+      } else {
+        example = makeFunctionExample(grade);
+        practice = makeFunctionPractice(example);
+        drawFunctionVisual(example);
+      }
+
+      currentPractice = practice;
+      exampleTextEl.textContent = example.text;
+      fillSteps(example.steps);
+      practiceQuestionEl.textContent = practice.question;
+      answerInput.value = "";
+      feedbackEl.textContent = "";
+      stopAudio();
+    }
+
+    function fillSteps(steps) {
+      exampleStepsEl.innerHTML = "";
+      steps.forEach(function (step) {
+        const li = document.createElement("li");
+        li.textContent = step;
+        exampleStepsEl.appendChild(li);
+      });
+    }
+
+    // Ratio example
+    function makeRatioExample(grade) {
+      const a = randInt(2, 4);
+      const b = randInt(3, 5);
+      const scale = randInt(2, 4);
+      const totalA = a * scale;
+      const totalB = b * scale;
+      return {
+        type: "ratio",
+        a: a,
+        b: b,
+        scale: scale,
+        totalA: totalA,
+        totalB: totalB,
+        text:
+          "For every " + a + " green squares, there are " + b + " blue squares. In one picture, there are " +
+          totalA + " green squares. How many blue squares are in that picture?",
+        steps: [
+          "The ratio is " + a + " to " + b + ".",
+          "The green squares were multiplied by " + scale + " to get " + totalA + ".",
+          "Do the same to the blue part: " + b + " times " + scale + " equals " + totalB + ".",
+          "So there are " + totalB + " blue squares."
+        ]
+      };
+    }
+
+    function makeRatioPractice(example) {
+      const newScale = example.scale + 1;
+      const newA = example.a * newScale;
+      const newB = example.b * newScale;
+      return {
+        type: "number",
+        answer: newB,
+        question:
+          "Now use the same ratio. If there are " + newA + " green squares, how many blue squares are there?"
+      };
+    }
+
+    function drawRatioVisual(example) {
+      visualAreaEl.innerHTML = "";
+      const row = document.createElement("div");
+      row.className = "tile-row";
+      const total = example.totalA + example.totalB;
+      for (let i = 0; i < total; i++) {
+        const tile = document.createElement("div");
+        tile.className = "tile" + (i < example.totalA ? " alt" : "");
+        row.appendChild(tile);
+      }
+      visualAreaEl.appendChild(row);
+      visualCaptionEl.textContent =
+        example.totalA + " green squares and " + example.totalB +
+        " blue squares show the ratio " + example.a + " to " + example.b + ".";
+    }
+
+    // Percent example
+    function makePercentExample(grade) {
+      const price = randInt(20, 60);
+      const percent = randInt(10, 40);
+      const increase = Math.random() < 0.5;
+      const change = (price * percent) / 100;
+      const newPrice = increase ? price + change : price - change;
+      const text =
+        "A shirt costs " + price + " dollars. It has a " + percent +
+        " percent " + (increase ? "increase, like tax and fees" : "discount") +
+        ". What is the new price?";
+      const steps = [
+        "Find " + percent + " percent of " + price + ".",
+        "Multiply: " + price + " times " + (percent / 100) + " equals " + change.toFixed(2) + ".",
+        increase
+          ? "Add the change: " + price + " plus " + change.toFixed(2) + " equals " + newPrice.toFixed(2) + "."
+          : "Subtract the change: " + price + " minus " + change.toFixed(2) + " equals " + newPrice.toFixed(2) + ".",
+        "So the new price is " + newPrice.toFixed(2) + " dollars."
+      ];
+      return {
+        type: "percent",
+        base: price,
+        percent: percent,
+        increase: increase,
+        newPrice: parseFloat(newPrice.toFixed(2)),
+        text: text,
+        steps: steps
+      };
+    }
+
+    function makePercentPractice(example) {
+      const newBase = example.base + randInt(5, 15);
+      const change = (newBase * example.percent) / 100;
+      const newPrice = example.increase
+        ? newBase + change
+        : newBase - change;
+      const q =
+        "A jacket costs " + newBase + " dollars with the same " + example.percent +
+        " percent " + (example.increase ? "increase" : "discount") +
+        ". What is the new price? (round to 2 decimal places)";
+      return {
+        type: "number",
+        answer: parseFloat(newPrice.toFixed(2)),
+        question: q
+      };
+    }
+
+    function drawPercentVisual(example) {
+      visualAreaEl.innerHTML = "";
+      const bar = document.createElement("div");
+      bar.className = "bar";
+
+      const basePart = document.createElement("div");
+      basePart.className = "bar-part-1";
+      basePart.style.flex = "100";
+      const changePart = document.createElement("div");
+      changePart.className = "bar-part-2";
+      changePart.style.flex = example.percent;
+
+      bar.appendChild(basePart);
+      bar.appendChild(changePart);
+      visualAreaEl.appendChild(bar);
+
+      visualCaptionEl.textContent =
+        "The long green part is the original price. The blue part is the " +
+        example.percent + " percent " +
+        (example.increase ? "extra" : "discount") + ".";
+    }
+
+    // Equation example
+    function makeEquationExample(grade) {
+      const x = randInt(2, 10);
+      const m = randInt(2, 6);
+      const b = randInt(-5, 5);
+      const rhs = m * x + b;
+      const text =
+        "Solve for x in an equation like " + m + " x plus or minus a number equals " + rhs + ".";
+      const steps = [
+        "Start with the equation " + m + " x " +
+        (b >= 0 ? "plus " + b : "minus " + Math.abs(b)) + " equals " + rhs + ".",
+        (b !== 0
+          ? "Undo the plus or minus part first: subtract or add " + Math.abs(b) + " on both sides."
+          : "There is no plus or minus number to remove."),
+        "Then you get " + m + " x equals " + (m * x) + ".",
+        "Now divide both sides by " + m + ". That gives x equals " + x + "."
+      ];
+      return {
+        type: "equation",
+        m: m,
+        b: b,
+        x: x,
+        rhs: rhs,
+        text: text,
+        steps: steps
+      };
+    }
+
+    function makeEquationPractice(example) {
+      const newX = example.x + randInt(1, 4);
+      const rhs = example.m * newX + example.b;
+      const q =
+        "Solve: " + example.m + " x " +
+        (example.b >= 0 ? "plus " + example.b : "minus " + Math.abs(example.b)) +
+        " equals " + rhs + ". What is x?";
+      return {
+        type: "number",
+        answer: newX,
+        question: q
+      };
+    }
+
+    function drawEquationVisual(example) {
+      visualAreaEl.innerHTML = "";
+      const box = document.createElement("div");
+      box.style.display = "flex";
+      box.style.alignItems = "center";
+      box.style.gap = "8px";
+
+      const left = document.createElement("div");
+      left.style.flex = "1";
+      left.style.height = "50px";
+      left.style.borderRadius = "10px";
+      left.style.background = "#0ea5e9";
+      left.style.display = "flex";
+      left.style.alignItems = "center";
+      left.style.justifyContent = "center";
+      left.style.fontSize = "12px";
+      left.textContent = example.m + " groups of x and " + example.b;
+
+      const right = document.createElement("div");
+      right.style.flex = "0 0 60px";
+      right.style.height = "50px";
+      right.style.borderRadius = "10px";
+      right.style.background = "#22c55e";
+      right.style.display = "flex";
+      right.style.alignItems = "center";
+      right.style.justifyContent = "center";
+      right.style.fontSize = "12px";
+      right.textContent = example.rhs;
+
+      box.appendChild(left);
+      box.appendChild(right);
+
+      visualAreaEl.appendChild(box);
+      visualCaptionEl.textContent =
+        "Think of the equation as a balance. Both sides must match. We undo steps to get one x.";
+    }
+
+    // Function / graph example
+    function makeFunctionExample(grade) {
+      const m = randInt(1, 4);
+      const b = randInt(-3, 3);
+      const x = randInt(-2, 4);
+      const y = m * x + b;
+      const text =
+        "A line has the rule y equals " + m + " x " +
+        (b >= 0 ? "plus " + b : "minus " + Math.abs(b)) +
+        ". What is the y value when x equals " + x + "?";
+      const steps = [
+        "Start with the rule y equals " + m + " x " +
+        (b >= 0 ? "plus " + b : "minus " + Math.abs(b)) + ".",
+        "Plug in x equals " + x + ".",
+        "Compute y equals " + m + " times " + x + " " +
+        (b >= 0 ? "plus " + b : "minus " + Math.abs(b)) + " which equals " + y + "."
+      ];
+      return {
+        type: "function",
+        m: m,
+        b: b,
+        x: x,
+        y: y,
+        text: text,
+        steps: steps
+      };
+    }
+
+    function makeFunctionPractice(example) {
+      const newX = example.x + randInt(1, 3);
+      const y = example.m * newX + example.b;
+      const q =
+        "Use the same rule y equals " + example.m + " x " +
+        (example.b >= 0 ? "plus " + example.b : "minus " + Math.abs(example.b)) +
+        ". What is y when x equals " + newX + "?";
+      return {
+        type: "number",
+        answer: y,
+        question: q
+      };
+    }
+
+    function drawFunctionVisual(example) {
+      visualAreaEl.innerHTML = "";
+      const line = document.createElement("div");
+      line.className = "number-line";
+
+      const minX = -4;
+      const maxX = 4;
+      const px = ((example.x - minX) / (maxX - minX)) * 100;
+
+      const tick0 = document.createElement("div");
+      tick0.className = "tick";
+      tick0.style.left = "50%";
+
+      const label0 = document.createElement("div");
+      label0.className = "label";
+      label0.style.left = "50%";
+      label0.textContent = "0";
+
+      const point = document.createElement("div");
+      point.className = "point";
+      point.style.left = px + "%";
+
+      const labelX = document.createElement("div");
+      labelX.className = "label";
+      labelX.style.left = px + "%";
+      labelX.textContent = "x = " + example.x;
+
+      line.appendChild(tick0);
+      line.appendChild(label0);
+      line.appendChild(point);
+      line.appendChild(labelX);
+
+      visualAreaEl.appendChild(line);
+      visualCaptionEl.textContent =
+        "Pick an x on the number line, then use the rule to find y. That is how a function works.";
+    }
+
+    // Answer checking
+    function checkAnswer() {
+      if (!currentPractice) {
+        feedbackEl.textContent = "Press New example first.";
+        feedbackEl.className = "feedback err";
+        return;
+      }
+      const raw = answerInput.value.trim();
+      if (!raw) {
+        feedbackEl.textContent = "Type an answer first.";
+        feedbackEl.className = "feedback err";
+        return;
+      }
+
+      const p = currentPractice;
+      let correct = false;
+
+      if (p.type === "number") {
+        const val = Number(raw);
+        if (!Number.isFinite(val)) {
+          feedbackEl.textContent = "Please type a number.";
+          feedbackEl.className = "feedback err";
+          return;
+        }
+        const diff = Math.abs(val - p.answer);
+        correct = diff < 0.01;
+      } else {
+        correct = raw.toLowerCase() === String(p.answer).toLowerCase();
+      }
+
+      stats.total += 1;
+      if (correct) stats.correct += 1;
+      saveStats();
+      updateStatsBadge();
+
+      if (correct) {
+        feedbackEl.textContent = "Nice job. You matched the example.";
+        feedbackEl.className = "feedback ok";
+      } else {
+        feedbackEl.textContent = "Not yet. A good answer is " + p.answer + ". Look at the example steps again.";
+        feedbackEl.className = "feedback err";
+      }
+    }
+
+    // Events
+    newExampleBtn.addEventListener("click", newExample);
+    checkAnswerBtn.addEventListener("click", checkAnswer);
+    answerInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") checkAnswer();
+    });
+    playHumanAudioBtn.addEventListener("click", playHumanAudio);
+
+    // Init
+    updateStatsBadge();
+    exampleTextEl.textContent =
+      "Choose a topic on the left, then press New example.";
+  </script>
+</body>
+</html>
